@@ -1,0 +1,10 @@
+!git clone https://github.com/HT3301601278/index-tts.git
+%cd index-tts
+!git lfs install
+!git lfs pull
+!pip install -U uv
+!uv sync --all-extras --default-index "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
+!pip install pyngrok
+
+!uv tool install "huggingface-hub[cli,hf_xet]"
+!hf download IndexTeam/IndexTTS-2 --local-dir=checkpoints

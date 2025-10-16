@@ -1,0 +1,45 @@
+import subprocess, time, socket
+from pyngrok import ngrok
+
+# 切换到项目目录
+%cd /content/index-tts
+
+# 设置 ngrok Token
+ngrok.set_auth_token("340OHrkNY4OuR3OKGzTXKzgs50g_2KpQ1oR2yx4atxSMPqUF7")
+
+# 关闭旧进程
+!pkill -f "uv run webui.py" || echo "没有旧进程"
+
+# 启动 IndexTTS2 WebUI 服务
+process = subprocess.Popen(
+    ["uv", "run", "webui.py", "--host", "0.0.0.0", "--port", "7860"],
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE
+)
+
+# 检测端口是否已监听
+def wait_for_port(host, port, timeout=120):
+    print(f"等待 WebUI 在 {port} 端口启动中...")
+    start = time.time()
+    while time.time() - start < timeout:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            if s.connect_ex((host, port)) == 0:
+                print("WebUI 已启动！")
+                return True
+        time.sleep(2)
+    print("等待超时，可能启动失败。")
+    return False
+
+wait_for_port("127.0.0.1", 7860)
+
+# 建立 ngrok 外网访问
+public_url = ngrok.connect(addr="http://0.0.0.0:7860")
+print("\n外网访问地址：", public_url)
+
+# 打印启动日志
+print("\n---- 启动日志 ----")
+for i in range(20):
+    line = process.stdout.readline()
+    if not line:
+        break
+    print(line.decode(errors="ignore").strip())
