@@ -29,6 +29,7 @@ parser.add_argument("--fp16", action="store_true", default=False, help="Use FP16
 parser.add_argument("--deepspeed", action="store_true", default=False, help="Use DeepSpeed to accelerate if available")
 parser.add_argument("--cuda_kernel", action="store_true", default=False, help="Use CUDA kernel for inference if available")
 parser.add_argument("--gui_seg_tokens", type=int, default=120, help="GUI: Max tokens per generation segment")
+parser.add_argument("--language", type=str, default="zh_CN", help="WebUI language (zh_CN or en_US), default: zh_CN")
 cmd_args = parser.parse_args()
 
 if not os.path.exists(cmd_args.model_dir):
@@ -51,7 +52,7 @@ import gradio as gr
 from indextts.infer_v2 import IndexTTS2
 from tools.i18n.i18n import I18nAuto
 
-i18n = I18nAuto(language="Auto")
+i18n = I18nAuto(language=cmd_args.language)
 MODE = 'local'
 tts = IndexTTS2(model_dir=cmd_args.model_dir,
                 cfg_path=os.path.join(cmd_args.model_dir, "config.yaml"),
@@ -174,8 +175,8 @@ def create_experimental_warning_message():
 
 with gr.Blocks(title="IndexTTS Demo") as demo:
     mutex = threading.Lock()
-    gr.HTML('''
-    <h2><center>IndexTTS2: A Breakthrough in Emotionally Expressive and Duration-Controlled Auto-Regressive Zero-Shot Text-to-Speech</h2>
+    gr.HTML(f'''
+    <h2><center>{i18n("IndexTTS2: 突破性的情感表达和时长控制的自回归零样本语音合成")}</h2>
 <p align="center">
 <a href='https://arxiv.org/abs/2506.21619'><img src='https://img.shields.io/badge/ArXiv-2506.21619-red'></a>
 </p>
@@ -287,7 +288,7 @@ with gr.Blocks(title="IndexTTS Demo") as demo:
         # we must use `gr.Dataset` to support dynamic UI rewrites, since `gr.Examples`
         # binds tightly to UI and always restores the initial state of all components,
         # such as the list of available choices in emo_control_method.
-        example_table = gr.Dataset(label="Examples",
+        example_table = gr.Dataset(label=i18n("示例"),
             samples_per_page=20,
             samples=get_example_cases(include_experimental=False),
             type="values",

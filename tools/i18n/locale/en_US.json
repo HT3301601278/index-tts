@@ -46,5 +46,7 @@
   "与音色参考音频相同": "Same as the voice reference",
   "情感随机采样": "Randomize emotion sampling",
   "显示实验功能": "Show experimental features",
-  "提示：此功能为实验版，结果尚不稳定，我们正在持续优化中。": "Note: This feature is currently experimental and may not produce satisfactory results. We're dedicated to improving its performance in a future release."
+  "提示：此功能为实验版，结果尚不稳定，我们正在持续优化中。": "Note: This feature is currently experimental and may not produce satisfactory results. We're dedicated to improving its performance in a future release.",
+  "IndexTTS2: 突破性的情感表达和时长控制的自回归零样本语音合成": "IndexTTS2: A Breakthrough in Emotionally Expressive and Duration-Controlled Auto-Regressive Zero-Shot Text-to-Speech",
+  "示例": "Examples"
 }
